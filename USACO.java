@@ -13,47 +13,48 @@ public class USACO{
       File test = new File(filename);
       Scanner read = new Scanner(test);
       String line = read.nextLine();
-      boolean temp = true;
-      String num = "";
-      System.out.println(line);
-      for(int i = 0; i < line.length(); i++){
-        if(line.charAt(i) == ' ') temp = false;
-        if(temp){
-          num+= line.charAt(i);
-        }
-        if(i == line.length() - 1) temp = false;
-        if(!temp && row == 0){
-          row = Integer.parseInt(num);
-          num = "";
-          temp = true;
-        }else if(!temp && col == 0){
-          col = Integer.parseInt(num);
-          num = "";
-          temp = true;
-        }else if(!temp && elevation == 0){
-          elevation = Integer.parseInt(num);
-          num = "";
-          temp = true;
-        }else if(!temp && nStomp == 0){
-          nStomp = Integer.parseInt(num);
-          num = "";
-          temp = true;
+      Scanner readLine = new Scanner(line);
+      for(int i = 0; i < 4; i++){
+        int num = readLine.nextInt();
+        if(row == 0){
+          row = num;
+        }else if(col == 0){
+          col = num;
+        }else if(elevation == 0){
+          elevation = num;
+        }else if(nStomp == 0){
+          nStomp = num;
         }
       }
-      temp = true;
+      System.out.println(line);
+      System.out.println("" + row + " " + col + " " + elevation + " " + nStomp);
       map = new int[row][col];
       for(int i = 0; i < row; i++){
-        String temp = read.nextLine();
+      String temp = read.nextLine();
+      readLine = new Scanner(temp);
         for(int y = 0; y < col; y++){
-          if()
+          map[i][y] = readLine.nextInt();
         }
       }
       return 0;
     }
 
+    public static String map(){
+      String result = "";
+      for(int i = 0; i < map.length; i++){
+        for(int y = 0; y < map[i].length; y++){
+          if(map[i][y] < 10) result += " " + map[i][y] + " ";
+          if(map[i][y] >= 10) result += map[i][y] + " ";
+          if(y == map[i].length - 1) result += "\n";
+        }
+      }
+      return result;
+    }
+
     public static void main(String[] args){
       try{
         bronze("makelake.1.in");
+        System.out.println(map());
       }catch(FileNotFoundException e){
         System.out.println("File not found");
       }
