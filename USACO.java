@@ -40,8 +40,14 @@ public class USACO{
           temp = true;
         }
       }
-
+      temp = true;
       map = new int[row][col];
+      for(int i = 0; i < row; i++){
+        String temp = read.nextLine();
+        for(int y = 0; y < col; y++){
+          if()
+        }
+      }
       return 0;
     }
 
