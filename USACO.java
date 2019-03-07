@@ -96,7 +96,17 @@ public class USACO{
           if(map[i][y] >= 0) sum+= map[i][y]; //if it's greater than 0, add to depth count
         }
       }
+      clear();
       return sum * 72 * 72; //mutiply to find answer in cubic inches
+    }
+
+    /**A method that clears the variables so that multiple tests can be made
+    */
+    private static void clear(){
+      row = 0;
+      col = 0;
+      elevation = 0;
+      nStomp = 0;
     }
 
     /**A method used to print out the elevation map
@@ -119,7 +129,10 @@ public class USACO{
     public static void main(String[] args){
       try{
         System.out.println(bronze("makelake.1.in"));
-        System.out.println(map());
+        System.out.println(bronze("makelake.2.in"));
+        System.out.println(bronze("makelake.3.in"));
+        System.out.println(bronze("makelake.4.in"));
+        System.out.println(bronze("makelake.5.in"));
       }catch(FileNotFoundException e){
         System.out.println("File not found");
       }
