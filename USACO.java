@@ -20,18 +20,10 @@ public class USACO{
       Scanner read = new Scanner(test);
       String line = read.nextLine(); //read in first line
       Scanner readLine = new Scanner(line);
-      for(int i = 0; i < 4; i++){
-        int num = readLine.nextInt(); //get the next integer
-        if(row == 0){ //fill in the row
-          row = num;
-        }else if(col == 0){ //fill in the column
-          col = num;
-        }else if(elevation == 0){ //fill in the elevation requirement
-          elevation = num;
-        }else if(nStomp == 0){ //fill in the number of stomps
-          nStomp = num;
-        }
-      }
+      row = readLine.nextInt(); //fill in the row
+      col = readLine.nextInt(); //fill in the column
+      elevation = readLine.nextInt(); //fill in the elevation requirement
+      nStomp = readLine.nextInt(); //fill in the number of stomps
       //System.out.println(line);
       //System.out.println("" + row + " " + col + " " + elevation + " " + nStomp);
       map = new int[row][col]; //create map
@@ -107,6 +99,7 @@ public class USACO{
       col = 0;
       elevation = 0;
       nStomp = 0;
+      time = 0;
     }
 
     /**A method used to print out the elevation map
@@ -125,14 +118,35 @@ public class USACO{
       return result;
     }
 
+    private static int time = 0;
+    private static int r1 = 0;
+    //private static int
+    public static int silver(String filename) throws FileNotFoundException{
+      File test = new File(filename); //read in file
+      Scanner read = new Scanner(test);
+      String line = read.nextLine(); //read in first line
+      Scanner readLine = new Scanner(line);
+      row = readLine.nextInt();
+      col = readLine.nextInt();
+      time = readLine.nextInt();
+      map = new int[row][col];
+      for(int i = 0; i < row; i++){ //fill in the 2D array with the integers in the map
+        line = read.nextLine();
+        readLine = new Scanner(line);
+        for(int y = 0; y < col; y++){
+          map[i][y] = readLine.nextInt();
+        }
+      }
+      return 0;
+    }
 
     public static void main(String[] args){
       try{
-        System.out.println(bronze("makelake.1.in"));
-        System.out.println(bronze("makelake.2.in"));
-        System.out.println(bronze("makelake.3.in"));
-        System.out.println(bronze("makelake.4.in"));
-        System.out.println(bronze("makelake.5.in"));
+        System.out.println(bronze("makelake.1.in")); //342144
+        System.out.println(bronze("makelake.2.in")); //102762432
+        System.out.println(bronze("makelake.3.in")); //1058992704
+        System.out.println(bronze("makelake.4.in")); //753121152
+        System.out.println(bronze("makelake.5.in")); //1028282688
       }catch(FileNotFoundException e){
         System.out.println("File not found");
       }
