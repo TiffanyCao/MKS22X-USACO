@@ -144,7 +144,8 @@ public class USACO{
       start[1] = readLine.nextInt();
       end[0] = readLine.nextInt();
       end[1] = readLine.nextInt();
-      System.out.println("" + row + " " + col + " " + time + " " + start[0] + " " + start[1] + " " + end[0] + " " + end[1]);
+      //System.out.println("" + row + " " + col + " " + time + " " + start[0] + " " + start[1] + " " + end[0] + " " + end[1]);
+      
       return 0;
     }
 
