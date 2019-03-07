@@ -55,7 +55,7 @@ public class USACO{
         stomped(rowS, colS, stompE); //perform the stomps
         //System.out.println(map());
       }
-      return 0;
+      return solve();
     }
 
     /**A helper method that performs the stomps of the cows
@@ -82,6 +82,23 @@ public class USACO{
       }
     }
 
+    /**A helper method that takes the final water level and goes through the map for the aggregated depth
+    *the depth is taken by subtracting the each square's elevation from the final water level and adding them
+    *negative depths are not counted (i.e. if the elevation is higher than the final water level)
+    *the aggregated depth is multiplied to 72 * 72 for the final volume in cubic inches
+    *@return int the volume of the lake in cubic inches
+    */
+    public static int solve(){
+      int sum = 0; //aggregated depth
+      for(int i = 0; i < map.length; i++){
+        for(int y = 0; y < map[i].length; y++){
+          map[i][y] = elevation - map[i][y]; //subtract elevation from final water level
+          if(map[i][y] >= 0) sum+= map[i][y]; //if it's greater than 0, add to depth count
+        }
+      }
+      return sum * 72 * 72; //mutiply to find answer in cubic inches
+    }
+
     /**A method used to print out the elevation map
     *@return String
     */
@@ -89,7 +106,8 @@ public class USACO{
       String result = "";
       for(int i = 0; i < map.length; i++){
         for(int y = 0; y < map[i].length; y++){
-          if(map[i][y] < 10) result += " " + map[i][y] + " ";
+          if(map[i][y] < 0) result += "-- ";
+          if(map[i][y] < 10 && map[i][y] >= 0) result += " " + map[i][y] + " ";
           if(map[i][y] >= 10) result += map[i][y] + " ";
           if(y == map[i].length - 1) result += "\n";
         }
@@ -100,8 +118,8 @@ public class USACO{
 
     public static void main(String[] args){
       try{
-        bronze("makelake.1.in");
-        //System.out.println(map());
+        System.out.println(bronze("makelake.1.in"));
+        System.out.println(map());
       }catch(FileNotFoundException e){
         System.out.println("File not found");
       }
