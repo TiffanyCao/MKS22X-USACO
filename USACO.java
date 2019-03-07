@@ -9,34 +9,71 @@ public class USACO{
     private static int nStomp = 0;
     private static int[][] map;
 
+    /**A method that solves Lake Making
+    *the method takes in a file with a map of the pasture, the final elevation, and stomping instructions
+    *it reads all of the instructions, performs them according to the rules, and "creates" the lake using the new map
+    *@param String filename
+    *@return int the volume of the newly made lake;
+    */
     public static int bronze(String filename) throws FileNotFoundException{
-      File test = new File(filename);
+      File test = new File(filename); //read in file
       Scanner read = new Scanner(test);
-      String line = read.nextLine();
+      String line = read.nextLine(); //read in first line
       Scanner readLine = new Scanner(line);
       for(int i = 0; i < 4; i++){
-        int num = readLine.nextInt();
-        if(row == 0){
+        int num = readLine.nextInt(); //get the next integer
+        if(row == 0){ //fill in the row
           row = num;
-        }else if(col == 0){
+        }else if(col == 0){ //fill in the column
           col = num;
-        }else if(elevation == 0){
+        }else if(elevation == 0){ //fill in the elevation requirement
           elevation = num;
-        }else if(nStomp == 0){
+        }else if(nStomp == 0){ //fill in the number of stomps
           nStomp = num;
         }
       }
-      System.out.println(line);
-      System.out.println("" + row + " " + col + " " + elevation + " " + nStomp);
-      map = new int[row][col];
-      for(int i = 0; i < row; i++){
-      String temp = read.nextLine();
-      readLine = new Scanner(temp);
+      //System.out.println(line);
+      //System.out.println("" + row + " " + col + " " + elevation + " " + nStomp);
+      map = new int[row][col]; //create map
+      for(int i = 0; i < row; i++){ //fill in the 2D array with the integers in the map
+        line = read.nextLine();
+        readLine = new Scanner(line);
         for(int y = 0; y < col; y++){
           map[i][y] = readLine.nextInt();
         }
       }
+      //System.out.println(map());
+      for(int i = 0; i < nStomp; i++){ //for each stomp
+        line = read.nextLine();
+        readLine = new Scanner(line);
+        int rowS = readLine.nextInt() - 1; //fill in the starting row (-1 because this starts at 0)
+        //System.out.println(rowS);
+        int colS = readLine.nextInt() - 1; //fill in the starting column (-1 because this starts at 0)
+        //System.out.println(colS);
+        int stompE = readLine.nextInt(); //fill in the stomping hardness
+        //System.out.println(stompE);
+        stomped(rowS, colS, stompE); //perform the stomps
+        //System.out.println(map());
+      }
       return 0;
+    }
+
+    public static void stomped(int row, int col, int level){
+      int times = level;
+      while(times != 0){
+        int largest = 0;
+        for(int i = row; i < row + 3; i++){
+          for(int y = col; y < col + 3; y++){
+            if(map[i][y] >= largest) largest = map[i][y];
+          }
+        }
+        for(int i = row; i < row + 3; i++){
+          for(int y = col; y < col + 3; y++){
+            if(map[i][y] >= largest) map[i][y]--;
+          }
+        }
+        times--;
+      }
     }
 
     public static String map(){
@@ -51,10 +88,11 @@ public class USACO{
       return result;
     }
 
+
     public static void main(String[] args){
       try{
         bronze("makelake.1.in");
-        System.out.println(map());
+        //System.out.println(map());
       }catch(FileNotFoundException e){
         System.out.println("File not found");
       }
