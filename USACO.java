@@ -105,7 +105,7 @@ public class USACO{
     /**A method used to print out the elevation map
     *@return String
     */
-    public static String map(){
+    public static String bronzeMap(){
       String result = "";
       for(int i = 0; i < map.length; i++){
         for(int y = 0; y < map[i].length; y++){
@@ -119,8 +119,10 @@ public class USACO{
     }
 
     private static int time = 0;
-    private static int r1 = 0;
-    //private static int
+    private static int[] start = new int[2];
+    private static int[] end = new int[2];
+    private static char[][] pasture;
+
     public static int silver(String filename) throws FileNotFoundException{
       File test = new File(filename); //read in file
       Scanner read = new Scanner(test);
@@ -129,24 +131,49 @@ public class USACO{
       row = readLine.nextInt();
       col = readLine.nextInt();
       time = readLine.nextInt();
-      map = new int[row][col];
+      pasture = new char[row][col];
       for(int i = 0; i < row; i++){ //fill in the 2D array with the integers in the map
         line = read.nextLine();
-        readLine = new Scanner(line);
         for(int y = 0; y < col; y++){
-          map[i][y] = readLine.nextInt();
+          pasture[i][y] = line.charAt(y);
         }
       }
+      line = read.nextLine();
+      readLine = new Scanner(line);
+      start[0] = readLine.nextInt();
+      start[1] = readLine.nextInt();
+      end[0] = readLine.nextInt();
+      end[1] = readLine.nextInt();
+      System.out.println("" + row + " " + col + " " + time + " " + start[0] + " " + start[1] + " " + end[0] + " " + end[1]);
       return 0;
+    }
+
+    /**A method used to print out the pasture map
+    *@return String
+    */
+    public static String silverMap(){
+      String result = "";
+      for(int i = 0; i < pasture.length; i++){
+        for(int y = 0; y < pasture[i].length; y++){
+          result += "" + pasture[i][y];
+          if(y == pasture[i].length - 1) result += "\n";
+        }
+      }
+      return result;
     }
 
     public static void main(String[] args){
       try{
+        /*
         System.out.println(bronze("makelake.1.in")); //342144
         System.out.println(bronze("makelake.2.in")); //102762432
         System.out.println(bronze("makelake.3.in")); //1058992704
         System.out.println(bronze("makelake.4.in")); //753121152
         System.out.println(bronze("makelake.5.in")); //1028282688
+        */
+
+        System.out.println(silver("ctravel.1.in"));
+        System.out.println(silverMap());
       }catch(FileNotFoundException e){
         System.out.println("File not found");
       }
