@@ -122,31 +122,43 @@ public class USACO{
     private static int[] start = new int[2];
     private static int[] end = new int[2];
     private static char[][] pasture;
+    private static int[][] moves = {{-1, 0},
+                                    {0, -1},
+                                    {1, 0},
+                                    {0, 1}};
+    private static int[][] movement;
 
     public static int silver(String filename) throws FileNotFoundException{
       File test = new File(filename); //read in file
       Scanner read = new Scanner(test);
       String line = read.nextLine(); //read in first line
       Scanner readLine = new Scanner(line);
-      row = readLine.nextInt();
-      col = readLine.nextInt();
-      time = readLine.nextInt();
-      pasture = new char[row][col];
+      row = readLine.nextInt(); //fill in the row
+      col = readLine.nextInt(); //fill in the column
+      time = readLine.nextInt(); //fill in the time; also the number of steps
+      pasture = new char[row][col]; //a map of the pasture
+      movement = new int[row][col]; //a map recording the number of possible ways to get to each sqaure given the time and start coordinate
+      for(int i = 0; i < row; i++){ //fill the movement map with zeros
+        for(int y = 0; y < col; y++){
+          movement[i][y] = 0;
+        }
+      }
       for(int i = 0; i < row; i++){ //fill in the 2D array with the integers in the map
         line = read.nextLine();
         for(int y = 0; y < col; y++){
           pasture[i][y] = line.charAt(y);
         }
       }
-      line = read.nextLine();
+      line = read.nextLine(); //line with the start and end coordinates
       readLine = new Scanner(line);
-      start[0] = readLine.nextInt();
-      start[1] = readLine.nextInt();
-      end[0] = readLine.nextInt();
-      end[1] = readLine.nextInt();
+      start[0] = readLine.nextInt() - 1; //fill in the starting row (-1 because this starts at 0)
+      start[1] = readLine.nextInt() - 1; //fill in the starting column (-1 because this starts at 0)
+      end[0] = readLine.nextInt() - 1; //fill in the ending row (-1 because this starts at 0)
+      end[1] = readLine.nextInt() - 1; //fill in the ending column (-1 because this starts at 0)
       //System.out.println("" + row + " " + col + " " + time + " " + start[0] + " " + start[1] + " " + end[0] + " " + end[1]);
-      
-      return 0;
+
+      return silverSolve(start[0], start[1], 0); //helper method
+      //return -1;
     }
 
     /**A method used to print out the pasture map
@@ -163,6 +175,52 @@ public class USACO{
       return result;
     }
 
+    /**A method used to print out the movements map
+    *The movements map tells us the number of possible ways to get to each sqaure in the given amount of time from the given start coordinate
+    *@return String
+    */
+    public static String silverMap2(){
+      String result = "";
+      for(int i = 0; i < movement.length; i++){
+        for(int y = 0; y < movement[i].length; y++){
+          result += "" + movement[i][y] + " ";
+          if(y == movement[i].length - 1) result += "\n";
+        }
+      }
+      return result;
+    }
+
+    /**A method that checks if a coordinate in within bounds of the map and if the coordinate is empty and can be moved on
+    *@param int row
+    *@param int col
+    *@return boolean
+    */
+    public static boolean inBounds(int row, int col){
+      if(row >= 0 && row < pasture.length && col >= 0 && col < pasture[0].length && pasture[row][col] != '*'){
+        return true;
+      }
+      return false;
+    }
+
+    /**A recursive helper method that tries all possible moves that can be made in the given time and records the ending positions of each pathway
+    *@param int row
+    *@param int col
+    *@param int count, this variable keeps track of the time that has passed
+    *@return int the number of possible ways to get to the given end coordinates in the given time
+    */
+    public static int silverSolve(int row, int col, int count){
+      if(count == time){ //if time is up, record the move on the board of movements
+        movement[row][col]++;
+      }else{ //if time isn't up and moves can still be made
+        for(int i = 0; i < 4; i++){ //loop through all possible moves
+          if(inBounds(row + moves[i][0], col + moves[i][1])){ //check if the move is valid and the sqaure is empty
+            silverSolve(row + moves[i][0], col + moves[i][1], count+1); //recursive call on the new spot, with the time adding up
+          }
+        }
+      }
+      return movement[end[0]][end[1]]; //return the number of possible ways to get to given end coordinate
+    }
+
     public static void main(String[] args){
       try{
         /*
@@ -173,8 +231,11 @@ public class USACO{
         System.out.println(bronze("makelake.5.in")); //1028282688
         */
 
-        System.out.println(silver("ctravel.1.in"));
-        System.out.println(silverMap());
+        System.out.println(silver("ctravel.1.in")); //1
+        System.out.println(silver("ctravel.2.in")); //74
+        System.out.println(silver("ctravel.3.in")); //6435
+        System.out.println(silver("ctravel.4.in")); //339246
+        System.out.println(silver("ctravel.5.in")); //0
       }catch(FileNotFoundException e){
         System.out.println("File not found");
       }
