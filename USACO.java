@@ -208,7 +208,7 @@ public class USACO{
     *@param int count, this variable keeps track of the time that has passed
     *@return int the number of possible ways to get to the given end coordinates in the given time
     */
-    public static int silverSolve(int row, int col, int count){
+    /*public static int silverSolve(int row, int col, int count){
       if(count == time){ //if time is up, record the move on the board of movements
         movement[row][col]++;
       }else{ //if time isn't up and moves can still be made
@@ -219,6 +219,36 @@ public class USACO{
         }
       }
       return movement[end[0]][end[1]]; //return the number of possible ways to get to given end coordinate
+    }*/
+
+    /**A recursive helper method that tries all possible moves that can be made in the given time and records the ending positions of each pathway
+    *@param int row
+    *@param int col
+    *@param int count, this variable keeps track of the time that has passed
+    *@return int the number of possible ways to get to the given end coordinates in the given time
+    */
+    public static int silverSolve(int row, int col, int count){
+      for(int i = 0; i < movement.length; i++){
+        for(int y = 0; y < movement[i].length; y++){
+          if(pasture[i][y] != '*'){
+            movement[i][y] = 0;
+          } else movement[i][y] = -1;
+        }
+      }
+      movement[row][col] = 1;
+      while(count != 0){
+        for(int i = 0; i < movement.length; i++){
+          for(int y = 0; y < movement[i].length; y++){
+            for(int x = 0; x < 4; x++){
+              if(inBounds(i + moves[x][0], y + moves[x][1]) && movement[i + moves[x][0]][y + moves[x][1]] != -1){
+                movement[i][y] += movement[i + moves[x][0]][i + moves[x][1]];
+              }
+            }
+          }
+        }
+        count--;
+      }
+      return movement[end[0]][end[1]];
     }
 
     public static void main(String[] args){
