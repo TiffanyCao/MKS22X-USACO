@@ -57,7 +57,7 @@ public class USACO{
     */
     public static void stomped(int row, int col, int level){
       int times = level; //records number of inches to stomp
-      while(times != 0){ //for each inch to stomp
+      //while(times != 0){ //for each inch to stomp
         int largest = 0;
         for(int i = row; i < row + 3; i++){ //check for the greatest elevation
           for(int y = col; y < col + 3; y++){
@@ -67,11 +67,11 @@ public class USACO{
         for(int i = row; i < row + 3; i++){
           for(int y = col; y < col + 3; y++){
             //if the elevation at this square is greater than or equal to the greatest elevation, stomp
-            if(map[i][y] >= largest) map[i][y]--;
+            if(map[i][y] >= largest) map[i][y] -= map[i][y] - times;
           }
         }
-        times--; //an inch has been stomped
-      }
+        //times--; //an inch has been stomped
+      //}
     }
 
     /**A helper method that takes the final water level and goes through the map for the aggregated depth
@@ -228,27 +228,27 @@ public class USACO{
     *@return int the number of possible ways to get to the given end coordinates in the given time
     */
     public static int silverSolve(int row, int col, int count){
-      for(int i = 0; i < movement.length; i++){
+      for(int i = 0; i < movement.length; i++){ //fill in the movement board with the appropriate values
         for(int y = 0; y < movement[i].length; y++){
-          if(pasture[i][y] != '*'){
+          if(pasture[i][y] != '*'){ //0 for available spaces
             movement[i][y] = 0;
-          } else movement[i][y] = -1;
+          } else movement[i][y] = -1; //-1 for trees
         }
       }
-      movement[row][col] = 1;
-      while(count != 0){
-        for(int i = 0; i < movement.length; i++){
+      movement[row][col] = 1; //the start of the movement
+      while(count != 0){ //keeps track of time AKA number of moves
+        for(int i = 0; i < movement.length; i++){ //loops through board
           for(int y = 0; y < movement[i].length; y++){
-            for(int x = 0; x < 4; x++){
+            for(int x = 0; x < 4; x++){ //if the square next to it is empty, add its moves
               if(inBounds(i + moves[x][0], y + moves[x][1]) && movement[i + moves[x][0]][y + moves[x][1]] != -1){
                 movement[i][y] += movement[i + moves[x][0]][i + moves[x][1]];
               }
             }
           }
         }
-        count--;
+        count--; //time
       }
-      return movement[end[0]][end[1]];
+      return movement[end[0]][end[1]]; //return the number of possible ways to get to end coordinate
     }
 
     public static void main(String[] args){
