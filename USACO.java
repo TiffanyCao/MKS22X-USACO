@@ -127,6 +127,7 @@ public class USACO{
                                     {1, 0},
                                     {0, 1}};
     private static int[][] movement;
+    private static int[][] tempM;
 
     public static int silver(String filename) throws FileNotFoundException{
       File test = new File(filename); //read in file
@@ -138,15 +139,13 @@ public class USACO{
       time = readLine.nextInt(); //fill in the time; also the number of steps
       pasture = new char[row][col]; //a map of the pasture
       movement = new int[row][col]; //a map recording the number of possible ways to get to each sqaure given the time and start coordinate
-      for(int i = 0; i < row; i++){ //fill the movement map with zeros
-        for(int y = 0; y < col; y++){
-          movement[i][y] = 0;
-        }
-      }
-      for(int i = 0; i < row; i++){ //fill in the 2D array with the integers in the map
+      for(int i = 0; i < row; i++){ //fill in the pasture and movement boards with the integers in the map
         line = read.nextLine();
         for(int y = 0; y < col; y++){
           pasture[i][y] = line.charAt(y);
+          if(pasture[i][y] != '*'){ //fill in the trees
+            movement[i][y] = 0;
+          }else movement[i][y] = -1;
         }
       }
       line = read.nextLine(); //line with the start and end coordinates
@@ -156,8 +155,7 @@ public class USACO{
       end[0] = readLine.nextInt() - 1; //fill in the ending row (-1 because this starts at 0)
       end[1] = readLine.nextInt() - 1; //fill in the ending column (-1 because this starts at 0)
       //System.out.println("" + row + " " + col + " " + time + " " + start[0] + " " + start[1] + " " + end[0] + " " + end[1]);
-
-      return silverSolve(start[0], start[1], 0); //helper method
+      return silverSolve(start[0], start[1], time); //helper method
       //return -1;
     }
 
@@ -221,34 +219,30 @@ public class USACO{
       return movement[end[0]][end[1]]; //return the number of possible ways to get to given end coordinate
     }*/
 
-    /**A recursive helper method that tries all possible moves that can be made in the given time and records the ending positions of each pathway
+    /**A helper method that finds the number of possible moves that can be made in the given time and records the ending positions of each pathway
     *@param int row
     *@param int col
-    *@param int count, this variable keeps track of the time that has passed
+    *@param int count, this variable keeps track of the number of moves
     *@return int the number of possible ways to get to the given end coordinates in the given time
     */
     public static int silverSolve(int row, int col, int count){
-      for(int i = 0; i < movement.length; i++){ //fill in the movement board with the appropriate values
-        for(int y = 0; y < movement[i].length; y++){
-          if(pasture[i][y] != '*'){ //0 for available spaces
-            movement[i][y] = 0;
-          } else movement[i][y] = -1; //-1 for trees
-        }
-      }
-      movement[row][col] = 1; //the start of the movement
-      while(count != 0){ //keeps track of time AKA number of moves
-        for(int i = 0; i < movement.length; i++){ //loops through board
+      movement[row][col] = 1; //start
+      for(int t = 0; t < count; t++){ //count the time
+        tempM = new int[pasture.length][pasture[0].length];
+        for(int i = 0; i < movement.length; i++){
           for(int y = 0; y < movement[i].length; y++){
-            for(int x = 0; x < 4; x++){ //if the square next to it is empty, add its moves
-              if(inBounds(i + moves[x][0], y + moves[x][1]) && movement[i + moves[x][0]][y + moves[x][1]] != -1){
-                movement[i][y] += movement[i + moves[x][0]][i + moves[x][1]];
+            if(pasture[i][y] != '*'){
+              for(int x = 0; x < 4; x++){ //otherwise find the sum of the surrounding squares
+                if(inBounds(i + moves[x][0], y + moves[x][1])){ //don't count the -1
+                  tempM[i][y] += movement[i + moves[x][0]][y + moves[x][1]];
+                }
               }
             }
           }
         }
-        count--; //time
+        movement = tempM; //update the movement board
       }
-      return movement[end[0]][end[1]]; //return the number of possible ways to get to end coordinate
+      return movement[end[0]][end[1]]; //return the number of possible ways to get to given end coordinate
     }
 
     public static void main(String[] args){
