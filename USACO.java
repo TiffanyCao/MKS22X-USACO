@@ -56,22 +56,19 @@ public class USACO{
     *@param int level is the given amount of inches to be stomped down
     */
     public static void stomped(int row, int col, int level){
-      int times = level; //records number of inches to stomp
-      //while(times != 0){ //for each inch to stomp
         int largest = 0;
         for(int i = row; i < row + 3; i++){ //check for the greatest elevation
           for(int y = col; y < col + 3; y++){
             if(map[i][y] >= largest) largest = map[i][y];
           }
         }
+        largest = largest - level; //subtract the depth
         for(int i = row; i < row + 3; i++){
           for(int y = col; y < col + 3; y++){
             //if the elevation at this square is greater than or equal to the greatest elevation, stomp
-            if(map[i][y] >= largest) map[i][y] -= map[i][y] - times;
+            if(map[i][y] >= largest) map[i][y] = largest;
           }
         }
-        //times--; //an inch has been stomped
-      //}
     }
 
     /**A helper method that takes the final water level and goes through the map for the aggregated depth
@@ -247,13 +244,13 @@ public class USACO{
 
     public static void main(String[] args){
       try{
-        /*
+
         System.out.println(bronze("makelake.1.in")); //342144
         System.out.println(bronze("makelake.2.in")); //102762432
         System.out.println(bronze("makelake.3.in")); //1058992704
         System.out.println(bronze("makelake.4.in")); //753121152
         System.out.println(bronze("makelake.5.in")); //1028282688
-        */
+
 
         System.out.println(silver("ctravel.1.in")); //1
         System.out.println(silver("ctravel.2.in")); //74
